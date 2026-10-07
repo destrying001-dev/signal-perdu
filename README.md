@@ -26,5 +26,4 @@ Si tu lis ce fichier, c'est que tu as regardé là où personne ne regarde. C'es
 
 Aucune. Ce site n'existe pas.
 
----
-*Œuvre de fiction. Les entreprises, personnes et événements mentionnés sont imaginaires.*
+
