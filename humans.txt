@@ -1,0 +1,9 @@
+/* TEAM */
+Webmaster : Marta Q.
+Lieu : quelque part entre deux serveurs
+Musique : Chopin, Op. 9
+
+/* SITE */
+Derniere mise a jour : 16/03/2026 (ou 03/16 pour les amis outre-Atlantique)
+Standards : HTML 3.2, un peu de 5, beaucoup de patience
+Outils : Notepad, cafe, insomnie

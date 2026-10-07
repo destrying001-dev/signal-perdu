@@ -1,0 +1,8 @@
+# 31/07 : menage fait, plus rien de sensible ici
+User-agent: *
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /old/
+Disallow: /tmp/
+Disallow: /orphee-prod/
+Disallow: /vault/
