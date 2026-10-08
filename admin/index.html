@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<title>Administration</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body class="crt">
+<!-- le mot de passe n'est pas ici, mais merci d'avoir cherché -->
+<div style="max-width:520px;margin:12vh auto">
+<h2 style="color:#33ff66;border:0">ADMINISTRATION</h2>
+<form id="f">
+<p>utilisateur : <input id="u" type="text" style="width:60%"></p>
+<p>mot de passe : <input id="p" type="password" style="width:60%"></p>
+<button>Connexion</button>
+</form>
+<p id="m" style="margin-top:20px"></p>
+</div>
+<script>
+var n = 0;
+document.getElementById("f").addEventListener("submit", function (e) {
+  e.preventDefault(); n++;
+  var p = document.getElementById("p").value, m = document.getElementById("m");
+  if (/1703|0317/.test(p)) m.textContent = "Presque. Mais non. (tentative " + n + " journalisée)";
+  else if (n < 5) m.textContent = "Accès refusé. Tentative " + n + " journalisée.";
+  else m.textContent = "Accès refusé. Tu es têtu(e). Le bon chemin est ailleurs : cette porte n'a jamais été reliée à rien.";
+});
+</script>
+</body>
+</html>
