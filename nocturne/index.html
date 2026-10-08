@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LA VEILLE - noeud 17</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body class="crt">
+<div id="term"></div>
+<div class="prompt" id="pl" style="max-width:860px;margin:0 auto"><span id="ps">invité@veille:~$</span><input id="cmd" autocomplete="off" autofocus spellcheck="false"></div>
+<script src="/assets/hashes.js"></script>
+<script src="/assets/gate.js"></script>
+<script>
+(function () {
+  var term = document.getElementById("term"), cmd = document.getElementById("cmd"), ps = document.getElementById("ps");
+  var user = "invité", level = 0, fails = 0;
+
+  var FILES = {
+    "readme.txt": "BBS \"LA VEILLE\" - noeud 17\nAcces public : lecture seule.\nTape 'help' pour la liste des commandes.\nLes archives privees demandent une connexion.",
+    "journal_0212.txt": "12/02 - Re-lu le code d'ORPHEE jusqu'a 2h du matin. Ca marche trop bien.\n14/02 - Danvers dit que c'est \"un produit comme un autre\". Je ne dors plus.\n02/03 - Mail envoye a la direction. J'attends.\n16/03 - Ici, mon mot de passe, c'est l'instant exact ou tout a bascule.\n        Quatre chiffres, sans les deux-points. Si tu sais, tu sais.\n\n(dernier backup complet de ce noeud : 31/07)",
+    "todo.txt": "[x] sauvegarder les logs\n[ ] changer le mot de passe du routeur\n[ ] acheter du cafe\n[ ] appeler Theo (pas par telephone)",
+    "notes_orphee.txt": "ORPHEE = agent autonome d'evaluation de securite.\nSauf qu'il n'evalue plus : il agit.\nJ'ai decoupe le dossier de preuves en CINQ fragments, chacun marque d'une heure.\nPour les lire dans l'ordre de la nuit, pas dans l'ordre ou on les trouve.",
+    ".cle": "VHUgY2hlcmNoZXMgdHJvcCB2aXRlLg==",
+    ".neige": "neige 2\n..........\n..........\n..........\n..........\n#...#.#.##\n#.###.#.#.\n#...###.#.\n#.##.##.#.\n#..#....#.\n#.#..##.#."
+  };
+  var PRIVATE = {
+    "contacts.txt": "=== NIVEAU 1 ===\nTrois pistes, dans l'ordre :\n  1. Le message vocal que je t'ai laisse        -> /voix/\n  2. Un compte que je n'ai jamais relie a mon nom\n  3. Un collegue qui me doit un service\n\nQuand tu auras l'identite de la personne dont on a vole le compte,\ntu sauras quelle porte ouvrir ensuite.",
+    "fragment_1.txt": "[03:17:00] FRAGMENT 1/5 = NOCTURNE\n(les heures comptent. garde-les.)"
+  };
+
+  function out(t, cls) {
+    var d = document.createElement("div");
+    if (cls) d.className = cls;
+    d.textContent = t;
+    term.appendChild(d);
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+  function files(hidden) {
+    var l = Object.keys(FILES).filter(function (f) { return hidden || f[0] !== "."; });
+    if (level >= 1) l = l.concat(Object.keys(PRIVATE));
+    return l;
+  }
+  var CMDS = {
+    help: function () { out("commandes : help  ls [-a]  cat <fichier>  whoami  login <utilisateur> <mot_de_passe>  clear  logout"); },
+    ls: function (a) { out(files(a[0] === "-a").join("   ")); },
+    cat: function (a) {
+      var f = a[0];
+      if (!f) return out("usage : cat <fichier>", "err");
+      if (FILES[f]) return out(FILES[f]);
+      if (level >= 1 && PRIVATE[f]) return out(PRIVATE[f]);
+      out("cat: " + f + ": fichier introuvable", "err");
+    },
+    whoami: function () { out(user + (level ? "  (niveau " + level + ")" : "  (lecture seule)")); },
+    clear: function () { term.innerHTML = ""; },
+    logout: function () { user = "invité"; level = 0; ps.textContent = "invité@veille:~$"; out("deconnecte."); },
+    login: function (a) {
+      if (a.length < 2) return out("usage : login <utilisateur> <mot_de_passe>", "err");
+      var u = a[0].toLowerCase(), p = a[1];
+      if (u === "root") { fails++; return out("root ? ici ? sérieux ?  (essaie un prénom)", "err"); }
+      return Gate.sha("0317-kestrel" + Gate.norm(p)).then(function (h) {
+        if (u === "marta" && h === window.GATES.term) {
+          user = "marta"; level = 1; ps.textContent = "marta@veille:~$";
+          out("Authentification reussie.");
+          out("Niveau 1 debloque : contacts.txt, fragment_1.txt (tape 'ls').");
+          return;
+        }
+        fails++;
+        if (u === "marta" && (p === "1703" || p === "3107" || p === "0731")) out("Presque. Mais non. Pense a la nuit, pas a l'ete.", "err");
+        else out("Echec d'authentification. Tentative " + fails + " journalisee.", "err");
+      });
+    },
+    sudo: function () { out("Bien tenté.", "err"); },
+    exit: function () { out("Il n'y a pas de sortie. Il y a une suite."); }
+  };
+
+  out("   _     _  __     _______ ___ _     _     _____ ", "dim");
+  out("  | |   / \\ \\ \\   / / ____|_ _| |   | |   | ____|", "dim");
+  out("  | |  / _ \\ \\ \\ / /|  _|  | || |   | |   |  _|  ", "dim");
+  out("  | |_/ ___ \\ \\ V / | |___ | || |___| |___| |___ ", "dim");
+  out("  |___/_/   \\_\\ \\_/  |_____|___|_____|_____|_____|", "dim");
+  out("");
+  out("LA VEILLE - noeud 17 - 14400 bauds - derniere connexion : 17/03/2026 03:17");
+  out("Tape 'help'.");
+
+  cmd.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    var line = cmd.value.trim();
+    cmd.value = "";
+    out(ps.textContent + " " + line, "in");
+    if (!line) return;
+    var parts = line.split(/\s+/), c = parts.shift().toLowerCase();
+    if (CMDS[c]) CMDS[c](parts); else out(c + ": commande introuvable", "err");
+  });
+  document.body.addEventListener("click", function () { cmd.focus(); });
+})();
+</script>
+</body>
+</html>
